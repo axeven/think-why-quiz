@@ -118,27 +118,27 @@
             question: "What is the strategic 'WHY' we need to solve this?",
             answers: [
                 { text: "We need to force users to buy phones with better cameras.", correct: false },
-                { text: "We need to increase the 'Success Rate' of KYC to grow our user base.", correct: true }, // The Why
-                { text: "We need to lower the threshold settings on our OCR library.", correct: false } // The How
+                { text: "We need to increase the 'Success Rate' of KYC to grow our user base.", correct: true }, 
+                { text: "We need to lower the threshold settings on our OCR library.", correct: false } 
             ],
             explanation: "Tweaking the OCR threshold is a 'How'. The 'Why' is that we are losing potential customers (Conversion Rate) at the entry gate."
         },
         {
             scenario: "The Engineering team wants to rewrite the FX Rate Engine in Golang instead of Python.",
-            question: "Which justification focuses on the 'WHY'?",
+            question: "Which justification focuses on the 'WHY' (The Business Value)?",
             answers: [
                 { text: "Because Golang is the trending tech and easier to hire for.", correct: false },
-                { text: "To reduce transaction latency during high-volatility market events.", correct: true }, // The Why
-                { text: "Because Python's Global Interpreter Lock (GIL) is annoying.", correct: false } // The How/Technical Complaint
+                { text: "To reduce transaction latency during high-volatility market events.", correct: true }, 
+                { text: "Because Python's Global Interpreter Lock (GIL) is annoying.", correct: false } 
             ],
             explanation: "We don't pick tech just because it's popular or annoying. We pick it to solve a business constraint—in this case, speed (Latency) when the market is moving fast."
         },
         {
             scenario: "A partner bank's API is down, and our pending transactions are stuck.",
-            question: "Identify the boxed-in 'HOW' thinking.",
+            question: "Which option is a TRAP because it focuses only on the 'How'?",
             answers: [
-                { text: "We need to preserve data integrity and user trust.", correct: false }, // The Why
-                { text: "We must spam the bank's API with retries every 1 second until it works.", correct: true }, // The How (The Trap)
+                { text: "We need to preserve data integrity and user trust.", correct: false }, 
+                { text: "We must spam the bank's API with retries every 1 second until it works.", correct: true }, // The Trap
                 { text: "We need a fallback mechanism or a queue system.", correct: false }
             ],
             explanation: "Spamming the API is a brute-force 'How' that might get us blocked. The goal (Why) is to ensure the money isn't lost and the user knows what's happening."
@@ -147,27 +147,27 @@
             scenario: "The Product Manager wants to remove the 'Confirm Transfer' popup to make the UI cleaner.",
             question: "What is the root 'WHY' conflict here?",
             answers: [
-                { text: "The conflict is between 'Frictionless Experience' vs 'Security/Accuracy'.", correct: true }, // The Why
+                { text: "The conflict is between 'Frictionless Experience' vs 'Security/Accuracy'.", correct: true }, 
                 { text: "The conflict is that the frontend developer hates coding modals.", correct: false },
-                { text: "We need to use a slide-to-confirm button instead.", correct: false } // The How
+                { text: "We need to use a slide-to-confirm button instead.", correct: false } 
             ],
             explanation: "The solution isn't just changing the button style. We have to decide if speed (UX) is more important than preventing accidental transfers (Security)."
         },
         {
             scenario: "We need to store transaction logs for 5 years to comply with OJK regulations.",
-            question: "What is the goal?",
+            question: "What is the main Objective?",
             answers: [
-                { text: "To buy more hard drives or increase AWS S3 storage limits.", correct: false }, // The How
-                { text: "To ensure regulatory compliance and auditability.", correct: true }, // The Why
+                { text: "To buy more hard drives or increase AWS S3 storage limits.", correct: false }, 
+                { text: "To ensure regulatory compliance and auditability.", correct: true }, 
                 { text: "To make the database search slower.", correct: false }
             ],
-            explanation: "Buying storage is just the purchase. The goal is staying legal so the business doesn't get shut down."
+            explanation: "Buying storage is just the purchase (The How). The goal (The Why) is staying legal so the business doesn't get shut down."
         },
         {
             scenario: "QA reports that testing the new Multi-Currency Wallet takes 3 days manually.",
-            question: "What is the correct 'WHY' for automation?",
+            question: "What is the correct 'WHY' for implementing automation?",
             answers: [
-                { text: "To shorten the release cycle so we can deploy features faster.", correct: true }, // The Why
+                { text: "To shorten the release cycle so we can deploy features faster.", correct: true }, 
                 { text: "Because Selenium scripts are cool to write.", correct: false },
                 { text: "To get rid of the QA team.", correct: false }
             ],
@@ -175,31 +175,31 @@
         },
         {
             scenario: "We send an SMS OTP for every single login, costing us 500 IDR per SMS.",
-            question: "The CFO wants to cut costs. What is the 'WHY' driven approach?",
+            question: "The CFO wants to cut costs. Which answer mistakes the Method for the Goal?",
             answers: [
-                { text: "We should switch to WhatsApp OTP or Push Notifications.", correct: false }, // The How (Solution)
-                { text: "We need to reduce operational costs while maintaining account security.", correct: true }, // The Why
+                { text: "We should switch to WhatsApp OTP or Push Notifications.", correct: true }, // The Mistake (Method focus)
+                { text: "We need to reduce operational costs while maintaining account security.", correct: false }, // The Goal
                 { text: "We should stop asking for OTPs.", correct: false }
             ],
-            explanation: "Switching to WA is a specific solution. Understanding the balance between Cost and Security allows us to think of many solutions (e.g., Trusted Devices, Biometrics, Authenticator Apps)."
+            explanation: "Switching to WA is just ONE method. If you focus on the Goal (Cost vs Security), you might find other solutions like Trusted Devices or Biometrics."
         },
         {
             scenario: "A developer hard-coded the IDR-to-USD rate because the API was slow during a demo.",
             question: "Why is this a critical failure?",
             answers: [
                 { text: "Because code reviewers will be angry.", correct: false },
-                { text: "Because it creates financial risk and inaccurate pricing for customers.", correct: true }, // The Why
-                { text: "Because they forgot to use a constant variable.", correct: false } // The How
+                { text: "Because it creates financial risk and inaccurate pricing for customers.", correct: true }, 
+                { text: "Because they forgot to use a constant variable.", correct: false } 
             ],
             explanation: "The mechanical error is hard-coding. The root problem is the financial risk (Business Logic) it introduces."
         },
         {
             scenario: "Customers are asking for a 'Dark Mode' in the app.",
-            question: "Identify the Trap (The 'How' obsession).",
+            question: "Which reasoning falls into the 'Solution First' trap?",
             answers: [
                 { text: "We need to check if our CSS framework supports variables.", correct: false },
                 { text: "We must implement it immediately because Competitor X has it.", correct: true }, // The Trap
-                { text: "We should analyze if this increases user engagement or accessibility.", correct: false } // The Why
+                { text: "We should analyze if this increases user engagement or accessibility.", correct: false } 
             ],
             explanation: "Copying a competitor is a trap. We should ask: Does this solve a user need (e.g., using the app at night)?"
         },
@@ -207,11 +207,11 @@
             scenario: "The dashboard loads slowly because it calculates 'Total Transaction Volume' from scratch every time.",
             question: "What is the 'WHY' regarding the solution?",
             answers: [
-                { text: "We need to provide data availability without performance degradation.", correct: true }, // The Why
-                { text: "We need to add `INDEX` to the SQL table.", correct: false }, // The How
-                { text: "We need to upgrade the RAM on the database server.", correct: false } // The How
+                { text: "We need to provide data availability without performance degradation.", correct: true }, 
+                { text: "We need to add `INDEX` to the SQL table.", correct: false }, 
+                { text: "We need to upgrade the RAM on the database server.", correct: false } 
             ],
-            explanation: "Adding an Index or Caching are solutions. The goal is to let the user see their data instantly without crashing the system."
+            explanation: "Adding an Index or Caching are specific technical solutions. The goal is to let the user see their data instantly without crashing the system."
         }
     ];
 
