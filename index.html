@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Think Why: The Strategy Quiz</title>
+    <style>
+        /* CSS: This controls the look and feel */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .quiz-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 { color: #2c3e50; margin-bottom: 5px; }
+        .subtitle { color: #7f8c8d; font-size: 0.9em; margin-bottom: 25px; }
+
+        .scenario-box {
+            background-color: #e8f4fd;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            text-align: left;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .question-text {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .btn-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1em;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover { background-color: #f9f9f9; border-color: #bbb; }
+        
+        /* Classes we will add with JavaScript for feedback */
+        button.correct { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        button.wrong { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+
+        #feedback-area {
+            margin-top: 20px;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+
+        #next-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            margin-top: 20px;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+        #next-btn:hover { background-color: #2980b9; }
+
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>The "Think Why" Quiz</h1>
+    <p class="subtitle">Distinguish the mechanism from the objective.</p>
+
+    <div style="margin-bottom: 20px;">Score: <span id="score">0</span></div>
+
+    <div id="quiz-content">
+        <div class="scenario-box">
+            <strong>Situation:</strong> <span id="scenario-text">Loading...</span>
+        </div>
+        
+        <span class="question-text" id="question-prompt">Loading...</span>
+        
+        <div class="btn-grid" id="answer-buttons">
+            </div>
+    </div>
+
+    <div id="feedback-area"></div>
+    <button id="next-btn" onclick="nextQuestion()">Next Question</button>
+</div>
+
+<script>
+    /* JAVASCRIPT: The Logic */
+
+    const questions = [
+        {
+            scenario: "Users are complaining that KTP (ID) verification fails because their photos are slightly blurry.",
+            question: "What is the strategic 'WHY' we need to solve this?",
+            answers: [
+                { text: "We need to force users to buy phones with better cameras.", correct: false },
+                { text: "We need to increase the 'Success Rate' of KYC to grow our user base.", correct: true }, // The Why
+                { text: "We need to lower the threshold settings on our OCR library.", correct: false } // The How
+            ],
+            explanation: "Tweaking the OCR threshold is a 'How'. The 'Why' is that we are losing potential customers (Conversion Rate) at the entry gate."
+        },
+        {
+            scenario: "The Engineering team wants to rewrite the FX Rate Engine in Golang instead of Python.",
+            question: "Which justification focuses on the 'WHY'?",
+            answers: [
+                { text: "Because Golang is the trending tech and easier to hire for.", correct: false },
+                { text: "To reduce transaction latency during high-volatility market events.", correct: true }, // The Why
+                { text: "Because Python's Global Interpreter Lock (GIL) is annoying.", correct: false } // The How/Technical Complaint
+            ],
+            explanation: "We don't pick tech just because it's popular or annoying. We pick it to solve a business constraint—in this case, speed (Latency) when the market is moving fast."
+        },
+        {
+            scenario: "A partner bank's API is down, and our pending transactions are stuck.",
+            question: "Identify the boxed-in 'HOW' thinking.",
+            answers: [
+                { text: "We need to preserve data integrity and user trust.", correct: false }, // The Why
+                { text: "We must spam the bank's API with retries every 1 second until it works.", correct: true }, // The How (The Trap)
+                { text: "We need a fallback mechanism or a queue system.", correct: false }
+            ],
+            explanation: "Spamming the API is a brute-force 'How' that might get us blocked. The goal (Why) is to ensure the money isn't lost and the user knows what's happening."
+        },
+        {
+            scenario: "The Product Manager wants to remove the 'Confirm Transfer' popup to make the UI cleaner.",
+            question: "What is the root 'WHY' conflict here?",
+            answers: [
+                { text: "The conflict is between 'Frictionless Experience' vs 'Security/Accuracy'.", correct: true }, // The Why
+                { text: "The conflict is that the frontend developer hates coding modals.", correct: false },
+                { text: "We need to use a slide-to-confirm button instead.", correct: false } // The How
+            ],
+            explanation: "The solution isn't just changing the button style. We have to decide if speed (UX) is more important than preventing accidental transfers (Security)."
+        },
+        {
+            scenario: "We need to store transaction logs for 5 years to comply with OJK regulations.",
+            question: "What is the goal?",
+            answers: [
+                { text: "To buy more hard drives or increase AWS S3 storage limits.", correct: false }, // The How
+                { text: "To ensure regulatory compliance and auditability.", correct: true }, // The Why
+                { text: "To make the database search slower.", correct: false }
+            ],
+            explanation: "Buying storage is just the purchase. The goal is staying legal so the business doesn't get shut down."
+        },
+        {
+            scenario: "QA reports that testing the new Multi-Currency Wallet takes 3 days manually.",
+            question: "What is the correct 'WHY' for automation?",
+            answers: [
+                { text: "To shorten the release cycle so we can deploy features faster.", correct: true }, // The Why
+                { text: "Because Selenium scripts are cool to write.", correct: false },
+                { text: "To get rid of the QA team.", correct: false }
+            ],
+            explanation: "Automation isn't about replacing people; it's about Speed to Market (Velocity) and consistency."
+        },
+        {
+            scenario: "We send an SMS OTP for every single login, costing us 500 IDR per SMS.",
+            question: "The CFO wants to cut costs. What is the 'WHY' driven approach?",
+            answers: [
+                { text: "We should switch to WhatsApp OTP or Push Notifications.", correct: false }, // The How (Solution)
+                { text: "We need to reduce operational costs while maintaining account security.", correct: true }, // The Why
+                { text: "We should stop asking for OTPs.", correct: false }
+            ],
+            explanation: "Switching to WA is a specific solution. Understanding the balance between Cost and Security allows us to think of many solutions (e.g., Trusted Devices, Biometrics, Authenticator Apps)."
+        },
+        {
+            scenario: "A developer hard-coded the IDR-to-USD rate because the API was slow during a demo.",
+            question: "Why is this a critical failure?",
+            answers: [
+                { text: "Because code reviewers will be angry.", correct: false },
+                { text: "Because it creates financial risk and inaccurate pricing for customers.", correct: true }, // The Why
+                { text: "Because they forgot to use a constant variable.", correct: false } // The How
+            ],
+            explanation: "The mechanical error is hard-coding. The root problem is the financial risk (Business Logic) it introduces."
+        },
+        {
+            scenario: "Customers are asking for a 'Dark Mode' in the app.",
+            question: "Identify the Trap (The 'How' obsession).",
+            answers: [
+                { text: "We need to check if our CSS framework supports variables.", correct: false },
+                { text: "We must implement it immediately because Competitor X has it.", correct: true }, // The Trap
+                { text: "We should analyze if this increases user engagement or accessibility.", correct: false } // The Why
+            ],
+            explanation: "Copying a competitor is a trap. We should ask: Does this solve a user need (e.g., using the app at night)?"
+        },
+        {
+            scenario: "The dashboard loads slowly because it calculates 'Total Transaction Volume' from scratch every time.",
+            question: "What is the 'WHY' regarding the solution?",
+            answers: [
+                { text: "We need to provide data availability without performance degradation.", correct: true }, // The Why
+                { text: "We need to add `INDEX` to the SQL table.", correct: false }, // The How
+                { text: "We need to upgrade the RAM on the database server.", correct: false } // The How
+            ],
+            explanation: "Adding an Index or Caching are solutions. The goal is to let the user see their data instantly without crashing the system."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const scenarioText = document.getElementById('scenario-text');
+    const questionPrompt = document.getElementById('question-prompt');
+    const answerButtonsElement = document.getElementById('answer-buttons');
+    const feedbackArea = document.getElementById('feedback-area');
+    const nextButton = document.getElementById('next-btn');
+    const scoreDisplay = document.getElementById('score');
+
+    // 2. Start the Quiz
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        scoreDisplay.innerText = score;
+        showQuestion();
+    }
+
+    // 3. Display a Question
+    function showQuestion() {
+        resetState();
+        let currentQuestion = questions[currentQuestionIndex];
+        
+        scenarioText.innerText = currentQuestion.scenario;
+        questionPrompt.innerText = currentQuestion.question;
+
+        currentQuestion.answers.forEach(answer => {
+            const button = document.createElement('button');
+            button.innerText = answer.text;
+            button.classList.add('btn');
+            button.dataset.correct = answer.correct; // Store correct/false value in the button HTML
+            button.addEventListener('click', selectAnswer);
+            answerButtonsElement.appendChild(button);
+        });
+    }
+
+    // 4. Clean up previous question
+    function resetState() {
+        nextButton.style.display = 'none';
+        feedbackArea.style.display = 'none';
+        feedbackArea.innerText = '';
+        while (answerButtonsElement.firstChild) {
+            answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+        }
+    }
+
+    // 5. Check the selected answer
+    function selectAnswer(e) {
+        const selectedBtn = e.target;
+        const isCorrect = selectedBtn.dataset.correct === "true";
+        const currentQuestion = questions[currentQuestionIndex];
+
+        // Disable all buttons so they can't click again
+        Array.from(answerButtonsElement.children).forEach(button => {
+            button.disabled = true;
+            if (button.dataset.correct === "true") {
+                button.classList.add('correct'); // Highlight the correct one
+            } else {
+                button.classList.add('wrong'); // Grey out or mark wrong
+            }
+        });
+
+        if (isCorrect) {
+            score++;
+            scoreDisplay.innerText = score;
+            feedbackArea.innerHTML = "<span style='color:green'>Correct!</span> " + currentQuestion.explanation;
+        } else {
+            selectedBtn.classList.add('wrong');
+            feedbackArea.innerHTML = "<span style='color:red'>Incorrect.</span> " + currentQuestion.explanation;
+        }
+
+        feedbackArea.style.display = 'block';
+        nextButton.style.display = 'block';
+    }
+
+    // 6. Move to next
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion();
+        } else {
+            // End of Quiz
+            scenarioText.innerText = "Quiz Completed!";
+            questionPrompt.innerText = `You scored ${score} out of ${questions.length}`;
+            answerButtonsElement.innerHTML = `<button onclick="startQuiz()">Restart Quiz</button>`;
+            nextButton.style.display = 'none';
+            feedbackArea.style.display = 'none';
+        }
+    }
+
+    // Initialize
+    startQuiz();
+
+</script>
+
+</body>
+</html>
